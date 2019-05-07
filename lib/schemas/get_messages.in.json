@@ -1,0 +1,19 @@
+{
+    "type": "object",
+    "properties": {
+        "limit": {
+            "required": false,
+            "type": "number",
+            "format": "int"
+        },
+        "filter": {
+            "type": "string"
+        },
+        "sortOrder": {
+            "type": "string",
+            "enum": [
+                "ASCENDING"
+            ]
+        }
+    }
+}

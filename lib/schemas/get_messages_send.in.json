@@ -1,0 +1,17 @@
+{
+    "type": "object",
+    "properties": {
+        "to": {
+            "required": true,
+            "type": "string"
+        },
+        "body": {
+            "required": true,
+            "type": "string"
+        },
+        "deduplication_id": {
+            "type": "integer",
+            "format": "int-32"
+        }
+    }
+}

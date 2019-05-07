@@ -1,0 +1,173 @@
+{
+    "type": "object",
+    "properties": {
+        "requestBody": {
+            "items": {
+                "description": "An object that you use when posting messages.",
+                "properties": {
+                    "body": {
+                        "description": "The message content as described in the `encoding`. If the `encoding` is BINARY, the body must contain only hexadecimal digits where one byte is represented as two digits. For example, if you want to send two bytes '0x05' and '0x1F', the message body must contain the text '051F'.\n\nThe message content can also contain templates, read the [body templates section](#tag/Message) for more information.\n",
+                        "example": "Hi there!",
+                        "type": "string"
+                    },
+                    "deliveryReports": {
+                        "description": "The type of delivery reports to request from the delivering network.\nThe default value  is `ALL`. Please note that not all networks support delivery reports.\nALL. All possible delivery reports\nERRORS. Only error delivery reports\nNONE. No delivery reports",
+                        "enum": [
+                            "ALL",
+                            "ERRORS",
+                            "NONE"
+                        ],
+                        "type": "string"
+                    },
+                    "encoding": {
+                        "description": "Describes the content of the message body.\n\nTypically this is TEXT, which is the default if no value is provided.\n\nIf you need to send characters that are not covered by the [GSM 03.38](https://en.wikipedia.org/wiki/GSM_03.38) character set you will need to specify UNICODE or use the `auto-unicode` parameter of the Send Messages Operation.\n\nIf you want to send a sequence of bytes, you must use BINARY.\n",
+                        "enum": [
+                            "TEXT",
+                            "UNICODE",
+                            "BINARY"
+                        ],
+                        "type": "string"
+                    },
+                    "from": {
+                        "description": "Identifies the sender.\n\nInstead of a structured object, you can supply a string value here. \nIf you do this, the `type` of the sender is derived to be either INTERNATIONAL or ALPHANUMERIC.  If the value does not begin with a `+` and it contains at least one character that is not a digit, the type is detected as ALPHANUMERIC. Otherwise, the type is detected as INTERNATIONAL.\n",
+                        "properties": {
+                            "address": {
+                                "description": "The address of the sender id.\n\nThe validation for this field depends on the value of the `type`.\nINTERNATIONAL can start with `+`. It has a maximum length of 15 digits, and has to be longer than 6 digits.\nALPHANUMERIC has a maximum length of 11 characters.\nSHORTCODE has a maximum length of 6 digits.\nREPLIABLE should not specify a value here.\n",
+                                "example": "1111111",
+                                "type": "string"
+                            },
+                            "type": {
+                                "description": "The type of the sender id.\n\nIf you want BulkSMS to collect replies to this message on your behalf, specify the type as REPLIABLE.  If the recipient is in a country where BulkSMS does not have a local reply number, the reply may incur costs that are more expensive than sending a local SMS in that country.\nIf you operate a service from a shortcode in a locale that allows messaging from such a shortcode, you can specify SHORTCODE for the type.\n",
+                                "enum": [
+                                    "INTERNATIONAL",
+                                    "ALPHANUMERIC",
+                                    "SHORTCODE",
+                                    "REPLIABLE"
+                                ],
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "type"
+                        ],
+                        "type": "object"
+                    },
+                    "longMessageMaxParts": {
+                        "description": "The maximum number of message parts that can be used for a [concatenated message](https://en.wikipedia.org/wiki/Concatenated_SMS).\nThe default is `3`.\n",
+                        "example": 99,
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "messageClass": {
+                        "description": "The class of the message, as specified by §4 of the GSM 03.38 specification.\n\nYou can provide either an integer value, or a mnemonic string.\n\nThe default value is SIM_SPECIFIC.\nNumeric values are\n| Name | Value|\n|------|------|\n| FLASH_SMS | 0      |\n| ME_SPECIFIC | 1    |\n| SIM_SPECIFIC | 2   |\n| TE_SPECIFIC | 3   |\n",
+                        "enum": [
+                            "FLASH_SMS",
+                            "ME_SPECIFIC",
+                            "SIM_SPECIFIC",
+                            "TE_SPECIFIC"
+                        ],
+                        "type": "string"
+                    },
+                    "protocolId": {
+                        "description": "The TP-PID value from GSM 03.40[.750] §9.2.3.9.\n\nYou can provide either an integer value, or a mnemonic string.\n\nIf unspecified, this property defaults to `0`, representing the IMPLICIT value.\nNumeric values are listed below\n| Name | Value|\n|----- |------|\n| IMPLICIT              | 00 |\n| SHORT_MESSAGE_TYPE_0  | 64 |\n| REPLACE_MESSAGE_1     | 65 |\n| REPLACE_MESSAGE_2     | 66 |\n| REPLACE_MESSAGE_3     | 67 |\n| REPLACE_MESSAGE_4     | 68 |\n| REPLACE_MESSAGE_5     | 69 |\n| REPLACE_MESSAGE_6     | 70 |\n| REPLACE_MESSAGE_7     | 71 |\n| RETURN_CALL           | 95 |\n| ME_DOWNLOAD           | 125 |\n| ME_DEPERSONALIZE      | 126 |\n| SIM_DOWNLOAD          | 127 |\n",
+                        "enum": [
+                            "IMPLICIT",
+                            "SHORT_MESSAGE_TYPE_0",
+                            "REPLACE_MESSAGE_1",
+                            "REPLACE_MESSAGE_2",
+                            "REPLACE_MESSAGE_3",
+                            "REPLACE_MESSAGE_4",
+                            "REPLACE_MESSAGE_5",
+                            "REPLACE_MESSAGE_6",
+                            "REPLACE_MESSAGE_7",
+                            "RETURN_CALL",
+                            "ME_DOWNLOAD",
+                            "ME_DEPERSONALIZE",
+                            "SIM_DOWNLOAD"
+                        ],
+                        "type": "string"
+                    },
+                    "routingGroup": {
+                        "description": "Allows you to choose routing. The default is STANDARD.\n",
+                        "enum": [
+                            "ECONOMY",
+                            "STANDARD",
+                            "PREMIUM"
+                        ],
+                        "type": "string"
+                    },
+                    "to": {
+                        "description": "Identifies the recipients\n\nInstead of an array of structured objects, you can also provide a single object, a simple string or an array of strings.\nIf you supply a string, the `type` is taken as INTERNATIONAL.\n",
+                        "items": {
+                            "example": {
+                                "address": "1111111",
+                                "fields": [
+                                    "Jack",
+                                    "$200.00"
+                                ],
+                                "type": "INTERNATIONAL"
+                            },
+                            "properties": {
+                                "address": {
+                                    "description": "The phone number of the recipient.  It must be supplied if the `type` is INTERNATIONAL",
+                                    "type": "string"
+                                },
+                                "fields": {
+                                    "description": "Custom fields that can be used in the message body. A value can be given if the `type` is INTERNATIONAL\n\nRead the [body templates section](#tag/Message) for more information.\n",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "id": {
+                                    "description": "The id of a group in your phonebook.  A value can be given if the `type` is GROUP.",
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "description": "The name of a group in your phonebook. A value can be given if the `type` is GROUP.",
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "description": "Type of the recipient. The default value is INTERNATIONAL.",
+                                    "enum": [
+                                        "INTERNATIONAL",
+                                        "GROUP"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
+                    "userSuppliedId": {
+                        "description": "Correlate the messages created from this submission to your data.\n\nThe value can contain no more than 20 characters.\n",
+                        "example": "submission-12765",
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "to",
+                    "body"
+                ],
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "deduplication_id": {
+            "type": "integer",
+            "format": "int32"
+        },
+        "auto_unicode": {
+            "type": "boolean",
+            "default": false
+        },
+        "schedule_date": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "schedule_description": {
+            "type": "string"
+        }
+    }
+}
